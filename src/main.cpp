@@ -1,5 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+#include "encode.hpp"
+#include "serial.hpp"
+#include "smaz.hpp"
+
 
 int main(){
 
@@ -31,7 +36,7 @@ int main(){
     if(location == ""){
 
         std::cout << "Error! Could not detect serial device!" << std::endl;;
-        return 0;
+        //return 0;
 
     }else{
 
@@ -43,28 +48,40 @@ int main(){
         system(("stty -F " + location + " -hupcl").c_str());
     #endif
 
+    /* std::ofstream serial_out;
+    serial_out.open(location);
+    std::string message = "hey there\n";
+    encode(message, ); */
     std::ifstream serial_in;
     serial_in.open(location);
 
     char input = 'y';
+    std::string message = "";
     while(input != 'n'){
 
         std::cout << "Reading... ";
         std::string data = "";
         char value;
+        //while loop to finish message?
         while(serial_in.get(value)){
-
+            
             if(value == '\n'){
 
                 break;
             }
 
             data += value;
+            message.append(decode(data));
+
         }
-        std::cout << "Got! Data = " << data << std::endl;
+        //decode char into a string and add to message
+        
+        std::cout << "Got! message = " << message << std::endl;
         std::cout << "Read more? (y/n) ";
         std::cin >> input;
     }
+
+    
 
     std::cout << "cya!" << std::endl;
 
