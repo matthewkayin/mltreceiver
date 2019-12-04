@@ -1,6 +1,8 @@
 #include <Pixy2.h>
 
 /****mychanges******/
+#include <math.h>
+char ch;
 bool bits[8];
 int bcount = 0;
 /******mychanges***/
@@ -13,15 +15,13 @@ int current = -1;
 int count = 0;
 
 /*****mychanges******/
-void trans(bool bits[]){
-  char ch;
+int trans(bool bits[]){
   int num = 0;
   int base = 2;
-  for(int i = 7; i >= 0; i--){
+  for(int i = 7; i > 0; i--){
     num = num + (bits[i] * (pow(base, (7-i))));
   }
-  ch = num;
-  Serial.print(ch);
+  return num;
 }
 /*******mychanges********/
 
@@ -68,14 +68,15 @@ void loop(){
     /******my changes*****/
     if(count >= 60){
         bits[bcount] = current;
+        bcount++;
         //Serial.print(current);  
         count = 0;
     }
 
     if(bcount == 7){
-      trans(bits);
+      ch = trans(bits);
+      Serial.print(ch);
       bcount = 0;
-      bits = {};
     }
     /******mychanges***********/
 }
