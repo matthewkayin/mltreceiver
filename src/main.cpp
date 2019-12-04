@@ -32,7 +32,7 @@ int main(){
             }
         }
     }
-
+   
     if(location == ""){
 
         std::cout << "Error! Could not detect serial device!" << std::endl;;
@@ -42,41 +42,49 @@ int main(){
 
         std::cout << "Success! Device detected at " + location << std::endl;
     }
-
+    
+    
+    
+     
     #ifdef _WIN32
     #else
         system(("stty -F " + location + " -hupcl").c_str());
     #endif
 
-    /* std::ofstream serial_out;
-    serial_out.open(location);
-    std::string message = "hey there\n";
-    encode(message, ); */
     std::ifstream serial_in;
     serial_in.open(location);
 
-    char input = 'y';
-    std::string message = "";
+        char input = 'y';
     while(input != 'n'){
-
+        
         std::cout << "Reading... ";
         std::string data = "";
         char value;
+
         //while loop to finish message?
+        int count = 0;
         while(serial_in.get(value)){
             
+            //the first time through usually misses the beginning of the data
             if(value == '\n'){
+                if(count++ == 0){
+                    std::cout << "trash: " << data << std::endl;
+                    data = "";
+                    continue;
+                }
 
                 break;
+            
             }
-
+            
             data += value;
-            message.append(decode(data));
-
-        }
-        //decode char into a string and add to message
+            
+        }      
+        //decode data and print
+                
+        decode(data);
         
-        std::cout << "Got! message = " << message << std::endl;
+        std::cout << "Got! data = " << data << std::endl;
         std::cout << "Read more? (y/n) ";
         std::cin >> input;
     }
