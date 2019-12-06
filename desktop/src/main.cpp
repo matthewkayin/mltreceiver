@@ -3,7 +3,8 @@
 #include <iostream>
 #include <fstream>
 
-bool validate(std::string input);
+int binary_to_int(std::string bitstring);
+std::string validate(std::string input);
 
 int main(){
 
@@ -51,6 +52,7 @@ int main(){
     serial_in.open(location);
 
     char input = 'y';
+    std::string current = "";
     while(input != 'n'){
 
         std::cout << "Reading... ";
@@ -58,6 +60,7 @@ int main(){
         char value;
         while(serial_in.get(value)){
 
+            std::cout << "READ! " << value << std::endl;
             if(value == '\n'){
 
                 break;
@@ -65,7 +68,14 @@ int main(){
 
             data += value;
         }
-        std::cout << "Got! Data = " << data << std::endl;
+        //std::cout << "Got! Data = " << data << std::endl;
+        std::string potential = validate(data);
+        if(potential != "" && current != potential){
+
+            current = potential;
+            std::cout << current << std::endl;
+        }
+
         std::cout << "Read more? (y/n) ";
         std::cin >> input;
     }
@@ -81,7 +91,37 @@ int main(){
     return 0;
 }
 
-bool validate(std::string input){
+int binary_to_int(std::string bitstring){
 
+    return (int)(binary_to_byte(bitstring)) + 128;
+}
 
+std::string validate(std::string input){
+
+    std::cout << "Received input: " << input << std::endl;
+    if(input.length() <= 16){
+
+        std::cout << "Input length is too short" << std::endl;
+        return "";
+    }
+
+    int byte_count = binary_to_int(input.substr(0, 8));
+    int chunk_size = binary_to_int(input.substr(8, 8));
+
+    double remaining_bytes = (input.length() - 16.0) / 8.0;
+    if(remaining_bytes != (int)remaining_bytes){
+
+        // we return false here because we've received partial bytes
+        std::cout << "Detected partial bytes" << std::endl;
+        return "";
+    }
+
+    if((int)remaining_bytes != byte_count){
+
+        // we return false here because we've received a different number than expected
+        std::cout << "Byte count inconsistent with header" << std::endl;
+        return "";
+    }
+
+    return decode(input.substr(16, chunk_size * 7));
 }
