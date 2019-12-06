@@ -11,7 +11,7 @@ int count = 0;
 void setup(){
 
     Serial.begin(9600);
-    Serial.print("Starting...\n");
+    //Serial.print("Starting...");
 
     pixy.init();
 }
@@ -27,18 +27,18 @@ void loop(){
         if(pixy.ccc.blocks[0].m_signature == red_sig){
 
             if(current != 0){
-              
+
                 current = 0;
-                count = 0;  
+                count = 0;
             }
             count++;
 
         }else if(pixy.ccc.blocks[0].m_signature == green_sig){
 
             if(current != 1){
-              
+
                 current = 1;
-                count = 0;  
+                count = 0;
             }
             count++;
         }
@@ -50,8 +50,8 @@ void loop(){
     }
 
     if(count >= 60){
-      
-        Serial.print(current);  
+
+        Serial.print(current);
         count = 0;
     }
 }

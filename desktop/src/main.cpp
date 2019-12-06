@@ -1,5 +1,9 @@
+#include "encode.hpp"
+
 #include <iostream>
 #include <fstream>
+
+bool validate(std::string input);
 
 int main(){
 
@@ -75,4 +79,9 @@ int main(){
     #endif
 
     return 0;
+}
+
+bool validate(std::string input){
+
+
 }
