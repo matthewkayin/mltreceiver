@@ -66,7 +66,7 @@ int main(){
                 break;
             }
 
-            data += value;
+            data += byte_to_binary(value);
         }
         //std::cout << "Got! Data = " << data << std::endl;
         std::string potential = validate(data);
@@ -105,8 +105,10 @@ std::string validate(std::string input){
         return "";
     }
 
-    int byte_count = binary_to_int(input.substr(0, 8));
+    int byte_count = binary_to_int(input.substr(0, 8)) / 8;
     int chunk_size = binary_to_int(input.substr(8, 8));
+    std::cout << "byte count = " << byte_count << std::endl;
+    std::cout << "chunk count = " << chunk_size << std::endl;
 
     double remaining_bytes = (input.length() - 16.0) / 8.0;
     if(remaining_bytes != (int)remaining_bytes){

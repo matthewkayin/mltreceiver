@@ -183,8 +183,8 @@ void send_message(){
 
 void broadcast_message(){
 
-    Serial.print(out_size);
-    Serial.print(chunk_size);
+    Serial.print((uint8_t)out_size);
+    Serial.print((uint8_t)chunk_size);
     for(int i = 0; i < out_size; i++){
 
         Serial.print(out_buffer[i]);
