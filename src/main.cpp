@@ -9,7 +9,7 @@
 int main(){
 
     std::cout << "Welcome to the thing!" << std::endl;
-    std::string location = "";
+    /* std::string location = "";
     std::string base_location_name = "";
     #ifdef _WIN32
         base_location_name = "COM";
@@ -49,17 +49,17 @@ int main(){
     #ifdef _WIN32
     #else
         system(("stty -F " + location + " -hupcl").c_str());
-    #endif
+    #endif */
 
-    std::ifstream serial_in;
-    serial_in.open(location);
+    Serial serial_in;
+    std::string str;
+    bool connected = serial_in.open(&str);
 
-        char input = 'y';
+    char input = 'y';
     while(input != 'n'){
         
-        std::cout << "Reading... ";
-        std::string data = "";
-        char value;
+        std::string data = serial_in.read();
+        /* char value;
 
         //while loop to finish message?
         int count = 0;
@@ -79,7 +79,7 @@ int main(){
             
             data += value;
             
-        }      
+        } */      
         //decode data and print
                 
         decode(data);
